@@ -24,7 +24,15 @@ export default function MainScreen() {
         const { latitude, longitude } = location.coords
         const API_KEY = "57fecd145c163c87033d596f19305141";
         const API = `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=minutely,hourly&appid=${API_KEY}`
-
+        /**
+        const response = await fetch(API);
+        const result = await response.json();
+        if (response.ok) {
+            setData(result);
+        } else {
+            setErrorMessage("Error");
+        }
+         */
         fetch(API)
             .then(res => res.json())
             .then(json => {
@@ -72,6 +80,8 @@ export default function MainScreen() {
             </> :
                 <View>
                     <Text>DATA FROM API: {data.lat}</Text>
+                    <Text>{data.lon}</Text>
+                    <Text>{data.timezone}</Text>
                     <FlatList
                         data={data}
                         renderItem={renderItem}
