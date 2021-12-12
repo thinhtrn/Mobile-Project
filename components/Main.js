@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, SafeAreaView, Modal, ActivityIndicator, FlatList, ScrollView, Image } from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView, Modal, ActivityIndicator, FlatList, Image } from 'react-native';
 import * as Location from 'expo-location';
 import moment from 'moment';
 
