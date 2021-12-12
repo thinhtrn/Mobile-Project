@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, SafeAreaView, Modal, ActivityIndicator, FlatList, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView, Modal, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import * as Location from 'expo-location';
 import GetWeather from './Weather';
 
@@ -51,8 +51,29 @@ export default function MainScreen() {
         let props = {
             data
         }
+        return (
+            <SafeAreaView style={styles.container}>
+                <Modal visible={isError} animationType='fade' transparent={true}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <Text>Data loading error. Please try again.</Text>
+                        </View>
+                    </View>
+                </Modal>
+                {isLoading ? <>
+                    <ActivityIndicator size='large' color='#00ccbb'></ActivityIndicator>
+                    <Text>Fetching the weather ...</Text>
+                </> :
+                    <View>
+                        <Text>DATA FROM API: {data.timezone}</Text>
+                        <GetWeather {...props} />
+                    </View>
+                }
+            </SafeAreaView>
+        )
     };
     */
+
     const renderItem = ({ item }) => (
         <Row
             item={item}
@@ -61,9 +82,16 @@ export default function MainScreen() {
 
     const Row = ({ item }) => (
         <View style={styles.rowContainer}>
-            <Text>FLATLIST WORK PLEASE: {lat}{item.lat}</Text>
+            <TouchableOpacity style={styles.rowChild}>
+                <View style={styles.rightView}>
+                    <Text>FLATLIST: {item.dt}</Text>
+                </View>
+            </TouchableOpacity>
         </View>
     )
+
+    const { daily } = data;
+    const DATA = daily;
 
     return (
         <SafeAreaView style={styles.container}>
@@ -79,13 +107,11 @@ export default function MainScreen() {
                 <Text>Fetching the weather ...</Text>
             </> :
                 <View>
-                    <Text>DATA FROM API: {data.lat}</Text>
-                    <Text>{data.lon}</Text>
-                    <Text>{data.timezone}</Text>
+                    <Text>DATA FROM API: {data.timezone}</Text>
                     <FlatList
-                        data={data}
+                        data={DATA}
                         renderItem={renderItem}
-                        keyExtractor={item => item.dt}
+                        keyExtractor={item => item.id}
                     />
                 </View>
             }

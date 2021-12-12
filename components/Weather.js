@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity } from "react-native";
 import { FlatList, SafeAreaView } from "react-native";
 
-export default function GetWeather({ weeklyWeather, city }) {
+export default function GetWeather({ data }) {
     const { daily } = data;
     //const { name } = city;
     var days = [
@@ -16,13 +16,11 @@ export default function GetWeather({ weeklyWeather, city }) {
     ];
     const DATA = daily;
 
-    const Row = ({ item, temp, lat }) => (
+    const Row = ({ item }) => (
         <View style={styles.rowContainer}>
             <TouchableOpacity style={styles.rowChild}>
                 <View style={styles.rightView}>
-                    <Text style={styles.textDegree}>{Math.round(temp.max)}°C</Text>
-                    <Text style={styles.textDegree}>{Math.round(temp.min)}°C</Text>
-                    <Text>BROOOO: {lat}</Text>
+                    <Text>FLATLIST: {item.dt}</Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -38,7 +36,7 @@ export default function GetWeather({ weeklyWeather, city }) {
             <FlatList
                 data={DATA}
                 renderItem={renderItem}
-                keyExtractor={item => item.dt}
+                keyExtractor={item => item.id}
             />
         </SafeAreaView>
     );
