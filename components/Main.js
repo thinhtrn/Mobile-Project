@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, SafeAreaView, Modal, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView, Modal, ActivityIndicator, FlatList, TouchableOpacity, Image } from 'react-native';
 import * as Location from 'expo-location';
-import GetWeather from './Weather';
+import moment from 'moment';
+//import GetWeather from './Weather';
 
 export default function MainScreen() {
     const [data, setData] = useState([]);
@@ -80,18 +81,31 @@ export default function MainScreen() {
         />
     );
 
+    const IMAGE = "http://openweathermap.org/img/wn/";
     const Row = ({ item }) => (
         <View style={styles.rowContainer}>
-            <TouchableOpacity style={styles.rowChild}>
-                <View style={styles.rightView}>
-                    <Text>FLATLIST: {item.dt}</Text>
-                </View>
-            </TouchableOpacity>
+            <View style={styles.rowChild}>
+                <Image
+                    style={styles.icon}
+                    source={{
+                        uri: `${IMAGE}${item.weather[0].icon}.png`,
+                    }}
+                />
+                <Text style={styles.dateText}>
+                    {moment.unix(item.dt).format('dddd')}
+                </Text>
+                <Text style={styles.type}>
+                    {item.weather[0].description}
+                </Text>
+                <Text style={styles.temp}>
+                    {(Math.round(item.temp.max) - 273.15).toFixed(0)}°C
+                </Text>
+            </View>
         </View>
     )
 
     const { daily } = data;
-    const DATA = daily;
+    const FLATLIST_DATA = daily;
 
     return (
         <SafeAreaView style={styles.container}>
@@ -107,11 +121,10 @@ export default function MainScreen() {
                 <Text>Fetching the weather ...</Text>
             </> :
                 <View>
-                    <Text>DATA FROM API: {data.timezone}</Text>
                     <FlatList
-                        data={DATA}
+                        data={FLATLIST_DATA}
                         renderItem={renderItem}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item.dt}
                     />
                 </View>
             }
@@ -170,5 +183,9 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
+    },
+    icon: {
+        width: 60,
+        height: 60,
     },
 });
